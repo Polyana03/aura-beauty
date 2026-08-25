@@ -152,7 +152,7 @@ body {
 
 /* Botão criar conta */
 
-#form_cadastrar button {
+#form_criar button {
     width: 100%;
     height: 35px;
     background-color: white;
@@ -165,7 +165,7 @@ body {
 }
 
 
-#form_cadastrar button:hover {
+#form_criar button:hover {
     background-color: rgb(255, 240, 244);
 }
 
