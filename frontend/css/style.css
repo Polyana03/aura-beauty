@@ -9,7 +9,7 @@ body {
     font-family: Arial, sans-serif;
     min-height: 100vh;
     background-color: rgb(255, 227, 232);
-    background-image: url(imagens/fundo_imagem.png);
+    background-image: url(../assets/fundo_imagem.png);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
