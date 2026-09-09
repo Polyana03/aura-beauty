@@ -1,6 +1,6 @@
 
 const formularioLogin = document.querySelector("#form_login");
-const formularioCriar = document.querySelector("#form_cadastrar");
+const formularioCriar = document.querySelector("#form_criar");
 
 const email = document.querySelector("#email");
 const senha = document.querySelector("#senha");
