@@ -1,0 +1,46 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nome": "Maria",
+      "email": "maria@email.com",
+      "senha": "123456"
+    }
+  ],
+  "profissionais": [
+    {
+      "id": 1,
+      "nome": "Polyana",
+      "cargo": "Maquiadora",
+      "servicos": ["Maquiagem Natural", "Maquiagem Social"]
+    },
+    {
+      "id": 2,
+      "nome": "Iara",
+      "cargo": "Manicure",
+      "servicos": ["Remoção de Cutículas", "Esmaltação"]
+    },
+    {
+      "id": 3,
+      "nome": "Suerllainy",
+      "cargo": "Cabeleireira",
+      "servicos": ["Corte", "Hidratação", "Escova"]
+    }
+  ],
+  "agendamentos": [
+    {
+      "id": 1,
+      "cliente": "Maria",
+      "servico": "Remoção de Cutículas",
+      "hora": "07:00",
+      "data": "2026-05-24"
+    },
+    {
+      "id": 2,
+      "cliente": "Maria",
+      "servico": "Esmaltação",
+      "hora": "10:00",
+      "data": "2026-05-24"
+    }
+  ]
+}
