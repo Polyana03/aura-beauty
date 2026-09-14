@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura Beauty | Início</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="app-body">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <h1>Aura Beauty</h1>
+        </div>
+
+        <nav class="menu">
+          <a class="menu-item active" href="inicio.html">Início</a>
+          <a class="menu-item" href="agendar.html">Agendar</a>
+          <a class="menu-item" href="agenda.html">Agenda</a>
+        </nav>
+
+        <button id="sairBtn" class="logout-btn" type="button">Sair</button>
+      </aside>
+
+      <main class="content-area">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h2>Bem-vindo(a)</h2>
+          </div>
+
+          <div class="profile-box">
+            <div id="usuarioAvatar" class="avatar">M</div>
+            <div class="profile-text">
+              <strong id="usuarioNome">Cliente</strong>
+              <span>Cliente</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="page-card">
+          <div class="welcome-box">
+            <h3 id="mensagemBoasVindas">Olá!</h3>
+            <p>Seu momento de beleza começa aqui.</p>
+          </div>
+
+          <div class="next-appointment">
+            <h4>Seu próximo horário:</h4>
+            <p id="proximoHorario">Carregando...</p>
+          </div>
+        </section>
+
+        <section class="grid-two">
+          <div class="panel">
+            <h3>Profissionais</h3>
+            <div id="listaProfissionais" class="card-list"></div>
+          </div>
+
+          <div class="panel">
+            <h3>Serviços</h3>
+            <ul id="listaServicos" class="service-list"></ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/inicio.js"></script>
+  </body>
+</html>

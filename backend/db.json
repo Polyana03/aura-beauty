@@ -5,6 +5,18 @@
       "nome": "Maria",
       "email": "maria@email.com",
       "senha": "123456"
+    },
+    {
+      "id": 1789426522936,
+      "nome": "irenericardoiara",
+      "email": "irenericardoiara@outlook.com",
+      "senha": "3333"
+    },
+    {
+      "id": 1789426565834,
+      "nome": "rikaelyiara",
+      "email": "rikaelyiara@gmail.com",
+      "senha": "1234"
     }
   ],
   "profissionais": [
@@ -12,19 +24,59 @@
       "id": 1,
       "nome": "Polyana",
       "cargo": "Maquiadora",
-      "servicos": ["Maquiagem Natural", "Maquiagem Social"]
+      "servicos": [
+        "Maquiagem Natural",
+        "Maquiagem Social"
+      ]
     },
     {
       "id": 2,
       "nome": "Iara",
       "cargo": "Manicure",
-      "servicos": ["Remoção de Cutículas", "Esmaltação"]
+      "servicos": [
+        "Remoção de Cutículas",
+        "Esmaltação"
+      ]
     },
     {
       "id": 3,
       "nome": "Suerllainy",
       "cargo": "Cabeleireira",
-      "servicos": ["Corte", "Hidratação", "Escova"]
+      "servicos": [
+        "Corte",
+        "Hidratação",
+        "Escova"
+      ]
+    }
+  ],
+  "servicos": [
+    {
+      "id": 1,
+      "nome": "Maquiagem Natural"
+    },
+    {
+      "id": 2,
+      "nome": "Maquiagem Social"
+    },
+    {
+      "id": 3,
+      "nome": "Remoção de Cutículas"
+    },
+    {
+      "id": 4,
+      "nome": "Esmaltação"
+    },
+    {
+      "id": 5,
+      "nome": "Corte"
+    },
+    {
+      "id": 6,
+      "nome": "Hidratação"
+    },
+    {
+      "id": 7,
+      "nome": "Escova"
     }
   ],
   "agendamentos": [
@@ -41,6 +93,14 @@
       "servico": "Esmaltação",
       "hora": "10:00",
       "data": "2026-05-24"
+    },
+    {
+      "cliente": "iara",
+      "servico": "Remoção de Cutículas",
+      "data": "2026-09-25",
+      "hora": "13:00",
+      "observacao": "Sem observação",
+      "id": 3
     }
   ]
 }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura Beauty | Agendar</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="app-body">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <h1>Aura Beauty</h1>
+        </div>
+
+        <nav class="menu">
+          <a class="menu-item" href="inicio.html">Início</a>
+          <a class="menu-item active" href="agendar.html">Agendar</a>
+          <a class="menu-item" href="agenda.html">Agenda</a>
+        </nav>
+
+        <button id="sairBtn" class="logout-btn" type="button">Sair</button>
+      </aside>
+
+      <main class="content-area">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h2>Agendar atendimento</h2>
+          </div>
+
+          <div class="profile-box">
+            <div id="usuarioAvatar" class="avatar">M</div>
+            <div class="profile-text">
+              <strong id="usuarioNome">Cliente</strong>
+              <span>Cliente</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="page-card form-layout">
+          <div class="form-panel">
+            <form id="formAgendamento">
+              <div class="campo">
+                <label for="nomeCliente">Nome do cliente</label>
+                <input id="nomeCliente" type="text" placeholder="Digite seu nome" />
+              </div>
+
+              <div class="campo">
+                <label for="servico">Serviço</label>
+                <select id="servico">
+                  <option value="">Selecione um serviço</option>
+                </select>
+              </div>
+
+              <div class="campo">
+                <label for="data">Data</label>
+                <input id="data" type="date" />
+              </div>
+
+              <div class="campo">
+                <label>Horário</label>
+                <div id="listaHorarios" class="time-list"></div>
+              </div>
+
+              <div class="campo">
+                <label for="observacao">Observação</label>
+                <textarea id="observacao" placeholder="Digite alguma observação (opcional)"></textarea>
+              </div>
+
+              <button type="submit" class="button button-primary">Confirmar agendamento</button>
+            </form>
+          </div>
+
+          <aside class="info-panel">
+            <h3>Importante</h3>
+            <p>Escolha um serviço, uma data e um horário disponível para confirmar o atendimento.</p>
+            <div class="info-box">
+              <h4>Dicas</h4>
+              <ul>
+                <li>Preencha seu nome corretamente.</li>
+                <li>Use a data do atendimento.</li>
+                <li>Escolha um horário disponível.</li>
+              </ul>
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/agendar.js"></script>
+  </body>
+</html>

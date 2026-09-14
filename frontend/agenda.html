@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura Beauty | Agenda</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="app-body">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <h1>Aura Beauty</h1>
+        </div>
+
+        <nav class="menu">
+          <a class="menu-item" href="inicio.html">Início</a>
+          <a class="menu-item" href="agendar.html">Agendar</a>
+          <a class="menu-item active" href="agenda.html">Agenda</a>
+        </nav>
+
+        <button id="sairBtn" class="logout-btn" type="button">Sair</button>
+      </aside>
+
+      <main class="content-area">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h2>Agenda</h2>
+          </div>
+
+          <div class="profile-box">
+            <div id="usuarioAvatar" class="avatar">M</div>
+            <div class="profile-text">
+              <strong id="usuarioNome">Cliente</strong>
+              <span>Cliente</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="page-card">
+          <div class="agenda-header">
+            <h3>Próximos agendamentos</h3>
+          </div>
+
+          <div id="listaAgendamentos" class="agenda-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/agenda.js"></script>
+  </body>
+</html>
