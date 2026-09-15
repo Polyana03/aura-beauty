@@ -3,6 +3,12 @@ const formularioLogin = document.getElementById('formLogin');
 const formularioCriar = document.getElementById('formCriar');
 const inputEmail = document.getElementById('email');
 const inputSenha = document.getElementById('senha');
+const linkEsqueceuSenha = document.querySelector('.esqueceu_senha');
+
+linkEsqueceuSenha.addEventListener('click', function (evento) {
+  evento.preventDefault();
+  alert('Ainda não há recuperação de senha no sistema. Fale com o salão para recuperar o acesso.');
+});
 
 async function buscarUsuarios() {
   const resposta = await fetch(`${apiUrl}/usuarios`);
@@ -104,9 +110,16 @@ formularioCriar.addEventListener('submit', async function (evento) {
       throw new Error('Erro ao criar usuário.');
     }
 
-    alert('Conta criada com sucesso!');
-    formularioLogin.reset();
-    inputEmail.focus();
+    localStorage.setItem(
+      'usuarioLogado',
+      JSON.stringify({
+        id: novoUsuario.id,
+        nome: novoUsuario.nome,
+        email: novoUsuario.email
+      })
+    );
+
+    window.location.href = 'inicio.html';
   } catch (erro) {
     console.error(erro);
     alert('Não foi possível criar a conta agora.');

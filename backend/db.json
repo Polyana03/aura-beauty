@@ -101,6 +101,22 @@
       "hora": "13:00",
       "observacao": "Sem observação",
       "id": 3
+    },
+    {
+      "cliente": "iara",
+      "servico": "Esmaltação",
+      "data": "2026-09-25",
+      "hora": "10:00",
+      "observacao": "Sem observação",
+      "id": 4
+    },
+    {
+      "cliente": "iara",
+      "servico": "Hidratação",
+      "data": "2026-09-15",
+      "hora": "16:00",
+      "observacao": "Sem observação",
+      "id": 5
     }
   ]
 }

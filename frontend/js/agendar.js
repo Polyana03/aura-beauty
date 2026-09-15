@@ -1,6 +1,9 @@
 const apiUrl = 'http://localhost:3001';
 const usuarioNome = document.getElementById('usuarioNome');
 const usuarioAvatar = document.getElementById('usuarioAvatar');
+const perfilNome = document.getElementById('perfilNome');
+const perfilEmail = document.getElementById('perfilEmail');
+const perfilTipo = document.getElementById('perfilTipo');
 const botaoSair = document.getElementById('sairBtn');
 const formulario = document.getElementById('formAgendamento');
 const selectServicos = document.getElementById('servico');
@@ -23,8 +26,38 @@ function pegarUsuarioLogado() {
 }
 
 function configurarUsuario(usuario) {
-  usuarioNome.textContent = usuario.nome;
-  usuarioAvatar.textContent = usuario.nome.charAt(0).toUpperCase();
+  usuarioNome.textContent = `Olá, ${usuario.nome}!`;
+  usuarioAvatar.src = '../imagem/mulher.jpg';
+  usuarioAvatar.alt = usuario.nome;
+
+  if (perfilNome) perfilNome.textContent = usuario.nome;
+  if (perfilEmail) perfilEmail.textContent = usuario.email || 'Não informado';
+  if (perfilTipo) perfilTipo.textContent = 'Cliente';
+}
+
+function configurarMenuPerfil() {
+  const perfilMenu = document.getElementById('perfilMenu');
+  const setaBtn = document.querySelector('.seta-btn');
+
+  if (!perfilMenu || !setaBtn) {
+    return;
+  }
+
+  setaBtn.addEventListener('click', function () {
+    const aberto = perfilMenu.classList.toggle('ativo');
+    perfilMenu.setAttribute('aria-hidden', String(!aberto));
+    setaBtn.setAttribute('aria-expanded', String(aberto));
+  });
+
+  document.addEventListener('click', function (event) {
+    const clicouDentro = perfilMenu.contains(event.target) || setaBtn.contains(event.target);
+
+    if (!clicouDentro) {
+      perfilMenu.classList.remove('ativo');
+      perfilMenu.setAttribute('aria-hidden', 'true');
+      setaBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
 }
 
 function preencherDataMinima() {
@@ -131,6 +164,7 @@ const usuario = pegarUsuarioLogado();
 
 if (usuario) {
   configurarUsuario(usuario);
+  configurarMenuPerfil();
   preencherDataMinima();
   criarListaHorarios();
   carregarServicos();

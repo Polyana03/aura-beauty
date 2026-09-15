@@ -1,6 +1,9 @@
 const apiUrl = 'http://localhost:3001';
 const usuarioNome = document.getElementById('usuarioNome');
 const usuarioAvatar = document.getElementById('usuarioAvatar');
+const perfilNome = document.getElementById('perfilNome');
+const perfilEmail = document.getElementById('perfilEmail');
+const perfilTipo = document.getElementById('perfilTipo');
 const listaAgendamentos = document.getElementById('listaAgendamentos');
 const botaoSair = document.getElementById('sairBtn');
 
@@ -16,8 +19,38 @@ function pegarUsuarioLogado() {
 }
 
 function configurarUsuario(usuario) {
-  usuarioNome.textContent = usuario.nome;
-  usuarioAvatar.textContent = usuario.nome.charAt(0).toUpperCase();
+  usuarioNome.textContent = `Olá, ${usuario.nome}!`;
+  usuarioAvatar.src = '../imagem/mulher.jpg';
+  usuarioAvatar.alt = usuario.nome;
+
+  if (perfilNome) perfilNome.textContent = usuario.nome;
+  if (perfilEmail) perfilEmail.textContent = usuario.email || 'Não informado';
+  if (perfilTipo) perfilTipo.textContent = 'Cliente';
+}
+
+function configurarMenuPerfil() {
+  const perfilMenu = document.getElementById('perfilMenu');
+  const setaBtn = document.querySelector('.seta-btn');
+
+  if (!perfilMenu || !setaBtn) {
+    return;
+  }
+
+  setaBtn.addEventListener('click', function () {
+    const aberto = perfilMenu.classList.toggle('ativo');
+    perfilMenu.setAttribute('aria-hidden', String(!aberto));
+    setaBtn.setAttribute('aria-expanded', String(aberto));
+  });
+
+  document.addEventListener('click', function (event) {
+    const clicouDentro = perfilMenu.contains(event.target) || setaBtn.contains(event.target);
+
+    if (!clicouDentro) {
+      perfilMenu.classList.remove('ativo');
+      perfilMenu.setAttribute('aria-hidden', 'true');
+      setaBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
 }
 
 async function carregarAgendamentos() {
@@ -30,12 +63,21 @@ async function carregarAgendamentos() {
 
     const agendamentos = await resposta.json();
 
-    if (!agendamentos.length) {
-      listaAgendamentos.innerHTML = '<p class="vazio">Nenhum agendamento encontrado.</p>';
+    const hoje = new Date();
+    const inicioHoje = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    const fimHoje = new Date(inicioHoje.getTime() + 24 * 60 * 60 * 1000);
+
+    const agendamentosDoDia = agendamentos.filter((agendamento) => {
+      const dataAgendamento = new Date(`${agendamento.data}T${agendamento.hora}`);
+      return dataAgendamento >= inicioHoje && dataAgendamento < fimHoje;
+    });
+
+    if (!agendamentosDoDia.length) {
+      listaAgendamentos.innerHTML = '<p class="vazio">Nenhum agendamento para hoje.</p>';
       return;
     }
 
-    const agendamentosOrdenados = [...agendamentos].sort(function (a, b) {
+    const agendamentosOrdenados = [...agendamentosDoDia].sort(function (a, b) {
       const dataA = `${a.data}T${a.hora}`;
       const dataB = `${b.data}T${b.hora}`;
 
@@ -75,5 +117,6 @@ const usuario = pegarUsuarioLogado();
 
 if (usuario) {
   configurarUsuario(usuario);
+  configurarMenuPerfil();
   carregarAgendamentos();
 }
