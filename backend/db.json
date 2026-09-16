@@ -52,31 +52,38 @@
   "servicos": [
     {
       "id": 1,
-      "nome": "Maquiagem Natural"
+      "nome": "Maquiagem Natural",
+      "preco": 120
     },
     {
       "id": 2,
-      "nome": "Maquiagem Social"
+      "nome": "Maquiagem Social",
+      "preco": 180
     },
     {
       "id": 3,
-      "nome": "Remoção de Cutículas"
+      "nome": "Remoção de Cutículas",
+      "preco": 40
     },
     {
       "id": 4,
-      "nome": "Esmaltação"
+      "nome": "Esmaltação",
+      "preco": 70
     },
     {
       "id": 5,
-      "nome": "Corte"
+      "nome": "Corte",
+      "preco": 90
     },
     {
       "id": 6,
-      "nome": "Hidratação"
+      "nome": "Hidratação",
+      "preco": 110
     },
     {
       "id": 7,
-      "nome": "Escova"
+      "nome": "Escova",
+      "preco": 95
     }
   ],
   "agendamentos": [
@@ -117,6 +124,40 @@
       "hora": "16:00",
       "observacao": "Sem observação",
       "id": 5
+    },
+    {
+      "cliente": "Maria",
+      "servico": "Maquiagem Social",
+      "data": "2026-09-25",
+      "hora": "15:00",
+      "observacao": "Sem observação",
+      "id": 6
+    },
+    {
+      "cliente": "Joana",
+      "servico": "Corte",
+      "data": "2026-09-17",
+      "hora": "13:00",
+      "observacao": "Sem observação",
+      "id": 7,
+      "status": "cancelado"
+    },
+    {
+      "cliente": "marcela",
+      "servico": "Corte",
+      "data": "2026-09-17",
+      "hora": "14:00",
+      "observacao": "Sem observação",
+      "id": 8
+    },
+    {
+      "cliente": "marcela",
+      "servico": "Escova",
+      "data": "2026-09-17",
+      "hora": "15:00",
+      "observacao": "vou pagar no cartao",
+      "valor": 95,
+      "id": 9
     }
   ]
 }

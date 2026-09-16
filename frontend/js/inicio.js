@@ -9,6 +9,12 @@ const listaProfissionais = document.getElementById('listaProfissionais');
 const listaServicos = document.getElementById('listaServicos');
 const proximoHorario = document.getElementById('proximoHorario');
 const botaoSair = document.getElementById('sairBtn');
+const campoBusca = document.getElementById('campoBusca');
+const estatAgendamentosHoje = document.getElementById('estatAgendamentosHoje');
+const estatMesAtual = document.getElementById('estatMesAtual');
+const labelMesAtual = document.getElementById('labelMesAtual');
+const estatFaturamentoMes = document.getElementById('estatFaturamentoMes');
+const estatFaturamentoDia = document.getElementById('estatFaturamentoDia');
 const imagensProfissionais = {
   Polyana: '../imagem/polyana.jpg',
   Iara: '../imagem/iara.jpg',
@@ -62,6 +68,64 @@ function configurarMenuPerfil() {
   });
 }
 
+function formatarMoeda(valor) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(valor || 0);
+}
+
+function atualizarEstatisticas(agendamentos, servicos) {
+  const hoje = new Date();
+  const inicioHoje = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+  const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+  const mesAtual = hoje.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+  const precosPorServico = Object.fromEntries(
+    servicos.map((servico) => [servico.nome, Number(servico.preco) || 0])
+  );
+
+  const agendamentosHoje = agendamentos.filter((agendamento) => {
+    if (agendamento.status === 'cancelado') return false;
+    const dataAgendamento = new Date(`${agendamento.data}T${agendamento.hora}`);
+    return dataAgendamento >= inicioHoje && dataAgendamento < new Date(inicioHoje.getTime() + 24 * 60 * 60 * 1000);
+  });
+
+  const agendamentosMes = agendamentos.filter((agendamento) => {
+    if (agendamento.status === 'cancelado') return false;
+    const dataAgendamento = new Date(`${agendamento.data}T${agendamento.hora}`);
+    return dataAgendamento >= inicioMes && dataAgendamento <= new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0, 23, 59, 59);
+  });
+
+  const faturamentoDia = agendamentosHoje.reduce((total, agendamento) => {
+    return total + (precosPorServico[agendamento.servico] || 0);
+  }, 0);
+
+  const faturamentoMes = agendamentosMes.reduce((total, agendamento) => {
+    return total + (precosPorServico[agendamento.servico] || 0);
+  }, 0);
+
+  if (estatAgendamentosHoje) {
+    estatAgendamentosHoje.textContent = String(agendamentosHoje.length);
+  }
+
+  if (estatMesAtual) {
+    estatMesAtual.textContent = String(agendamentosMes.length);
+  }
+
+  if (labelMesAtual) {
+    labelMesAtual.textContent = mesAtual.charAt(0).toUpperCase() + mesAtual.slice(1);
+  }
+
+  if (estatFaturamentoMes) {
+    estatFaturamentoMes.textContent = formatarMoeda(faturamentoMes);
+  }
+
+  if (estatFaturamentoDia) {
+    estatFaturamentoDia.textContent = formatarMoeda(faturamentoDia);
+  }
+}
+
 async function carregarDados() {
   try {
     const respostaProfissionais = fetch(`${apiUrl}/profissionais`);
@@ -74,6 +138,7 @@ async function carregarDados() {
       (await respostaAgendamentos).json()
     ]);
 
+    atualizarEstatisticas(agendamentos, servicos);
     renderizarProfissionais(profissionais);
     renderizarServicos(servicos);
     renderizarProximoHorario(agendamentos);
@@ -111,6 +176,10 @@ function renderizarProfissionais(profissionais) {
 }
 
 function renderizarServicos(servicos) {
+  if (!listaServicos) {
+    return;
+  }
+
   if (!servicos.length) {
     listaServicos.innerHTML = '<li class="vazio">Nenhum serviço cadastrado.</li>';
     return;
@@ -131,6 +200,7 @@ function renderizarProximoHorario(agendamentos) {
 
   const agendamentosFuturos = agendamentos
     .filter((agendamento) => {
+      if (agendamento.status === 'cancelado') return false;
       const dataAgendamento = new Date(`${agendamento.data}T${agendamento.hora}`);
       return dataAgendamento >= agora;
     })
@@ -146,9 +216,45 @@ function renderizarProximoHorario(agendamentos) {
     return;
   }
 
-  const agendamentoMaisProximo = agendamentosFuturos[0];
+  const proximos = agendamentosFuturos.slice(0, 2);
+  proximoHorario.innerHTML = proximos
+    .map(
+      (agendamento) => {
+        const dataFormatada = new Date(`${agendamento.data}T12:00:00`).toLocaleDateString('pt-BR');
 
-  proximoHorario.textContent = `${agendamentoMaisProximo.servico} - ${agendamentoMaisProximo.hora}`;
+        return `
+        <div>
+          <strong>${agendamento.servico}</strong> — ${dataFormatada} às ${agendamento.hora}
+        </div>
+        `;
+      }
+    )
+    .join('<br>');
+}
+
+if (campoBusca) {
+  campoBusca.addEventListener('input', function () {
+    const termo = campoBusca.value.trim().toLowerCase();
+
+    if (!termo) {
+      carregarDados();
+      return;
+    }
+
+    fetch(`${apiUrl}/agendamentos`)
+      .then((resposta) => resposta.json())
+      .then((agendamentos) => {
+        const filtrados = agendamentos.filter((agendamento) => {
+          const texto = `${agendamento.cliente} ${agendamento.servico} ${agendamento.data} ${agendamento.hora}`.toLowerCase();
+          return texto.includes(termo);
+        });
+
+        renderizarProximoHorario(filtrados);
+      })
+      .catch((erro) => {
+        console.error(erro);
+      });
+  });
 }
 
 botaoSair.addEventListener('click', function () {

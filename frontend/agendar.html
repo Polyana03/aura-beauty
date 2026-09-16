@@ -20,12 +20,6 @@
 
       <main class="conteudo">
         <header class="topo">
-          <div class="barra-pesquisa">
-            <span class="icone-lupa">🔍</span>
-            <input type="text" placeholder="Buscar início, agendar..." />
-            <button class="btn-fechar" type="button">✕</button>
-          </div>
-
           <div class="perfil-wrapper">
             <div class="perfil-topo">
               <img id="usuarioAvatar" src="../imagem/mulher.jpg" alt="Perfil" class="foto-perfil" />
@@ -58,25 +52,6 @@
           <p class="subtitulo">Escolha o serviço, a data e o horário desejados.</p>
         </section>
 
-        <section class="cards-estatisticos">
-          <div class="card-estat">
-            <strong>9</strong>
-            <span>Agendamentos para hoje</span>
-          </div>
-          <div class="card-estat">
-            <strong>24</strong>
-            <span>Maio 2026</span>
-          </div>
-          <div class="card-estat">
-            <strong>3</strong>
-            <span>Horários disponíveis</span>
-          </div>
-          <div class="card-estat">
-            <strong>R$350,00</strong>
-            <span>Faturamento do dia</span>
-          </div>
-        </section>
-
         <section class="page-card form-layout">
           <div class="form-panel">
             <form id="formAgendamento">
@@ -92,6 +67,11 @@
                 </select>
               </div>
 
+              <div id="resumoValor" class="resumo-valor" aria-live="polite">
+                <span>Valor do serviço:</span>
+                <strong id="valorServico">R$ 0,00</strong>
+              </div>
+
               <div class="campo">
                 <label for="data">Data</label>
                 <input id="data" type="date" />
@@ -105,6 +85,11 @@
               <div class="campo">
                 <label for="observacao">Observação</label>
                 <textarea id="observacao" placeholder="Digite alguma observação (opcional)"></textarea>
+              </div>
+
+              <div class="total-agendamento">
+                <span>Total do agendamento:</span>
+                <strong id="valorTotal">R$ 0,00</strong>
               </div>
 
               <button type="submit" class="button button-primary">Confirmar agendamento</button>

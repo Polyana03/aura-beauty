@@ -21,8 +21,8 @@
       <main class="conteudo">
         <header class="topo">
           <div class="barra-pesquisa">
-            <span class="icone-lupa">🔍</span>
-            <input type="text" placeholder="Buscar início, agendar..." />
+            <img class="icone-lupa" src="../imagem/lupa.jpg" alt="" />
+            <input id="campoBusca" type="text" placeholder="Buscar agendamento, cliente ou serviço..." />
             <button class="btn-fechar" type="button">✕</button>
           </div>
 
@@ -64,19 +64,19 @@
 
         <section class="cards-estatisticos">
           <div class="card-estat">
-            <strong>9</strong>
+            <strong id="estatAgendamentosHoje">0</strong>
             <span>Agendamentos para hoje</span>
           </div>
           <div class="card-estat">
-            <strong>24</strong>
-            <span>Maio 2026</span>
+            <strong id="estatMesAtual">0</strong>
+            <span id="labelMesAtual">Mês atual</span>
           </div>
           <div class="card-estat">
-            <strong>3</strong>
-            <span>Horários disponíveis</span>
+            <strong id="estatFaturamentoMes">R$0,00</strong>
+            <span>Faturamento do mês</span>
           </div>
           <div class="card-estat">
-            <strong>R$350,00</strong>
+            <strong id="estatFaturamentoDia">R$0,00</strong>
             <span>Faturamento do dia</span>
           </div>
         </section>

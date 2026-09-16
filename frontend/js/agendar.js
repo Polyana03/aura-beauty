@@ -11,8 +11,11 @@ const inputNome = document.getElementById('nomeCliente');
 const inputData = document.getElementById('data');
 const textareaObservacao = document.getElementById('observacao');
 const listaHorarios = document.getElementById('listaHorarios');
+const valorServicoEl = document.getElementById('valorServico');
+const valorTotalEl = document.getElementById('valorTotal');
 
 let horarioSelecionado = '';
+const precosPorServico = {};
 
 function pegarUsuarioLogado() {
   const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
@@ -93,6 +96,36 @@ function criarListaHorarios() {
   });
 }
 
+async function buscarAgendamentos() {
+  const resposta = await fetch(`${apiUrl}/agendamentos`);
+
+  if (!resposta.ok) {
+    throw new Error('Erro ao buscar agendamentos.');
+  }
+
+  return resposta.json();
+}
+
+function formatarMoeda(valor) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(valor || 0);
+}
+
+function atualizarResumoValor() {
+  const servicoSelecionado = selectServicos.value;
+  const valor = precosPorServico[servicoSelecionado] || 0;
+
+  if (valorServicoEl) {
+    valorServicoEl.textContent = formatarMoeda(valor);
+  }
+
+  if (valorTotalEl) {
+    valorTotalEl.textContent = formatarMoeda(valor);
+  }
+}
+
 async function carregarServicos() {
   try {
     const resposta = await fetch(`${apiUrl}/servicos`);
@@ -103,16 +136,30 @@ async function carregarServicos() {
 
     const servicos = await resposta.json();
 
+    servicos.forEach((servico) => {
+      precosPorServico[servico.nome] = Number(servico.preco) || 0;
+    });
+
     selectServicos.innerHTML = `
       <option value="">Selecione um serviço</option>
       ${servicos
         .map((servico) => `<option value="${servico.nome}">${servico.nome}</option>`)
         .join('')}
     `;
+
+    selectServicos.addEventListener('change', atualizarResumoValor);
+    atualizarResumoValor();
   } catch (erro) {
     console.error(erro);
     alert('Não foi possível carregar os serviços.');
   }
+}
+
+async function verificarHorarioDisponivel(data, hora) {
+  const agendamentos = await buscarAgendamentos();
+  return !agendamentos.some((agendamento) => {
+    return agendamento.status !== 'cancelado' && agendamento.data === data && agendamento.hora === hora;
+  });
 }
 
 formulario.addEventListener('submit', async function (evento) {
@@ -122,6 +169,7 @@ formulario.addEventListener('submit', async function (evento) {
   const servico = selectServicos.value;
   const data = inputData.value;
   const observacao = textareaObservacao.value.trim();
+  const valorTotal = precosPorServico[servico] || 0;
 
   if (!nome || !servico || !data || !horarioSelecionado) {
     alert('Preencha nome, serviço, data e escolha um horário.');
@@ -129,6 +177,13 @@ formulario.addEventListener('submit', async function (evento) {
   }
 
   try {
+    const horarioDisponivel = await verificarHorarioDisponivel(data, horarioSelecionado);
+
+    if (!horarioDisponivel) {
+      alert('Esse horário já está ocupado para essa data. Escolha outro disponível.');
+      return;
+    }
+
     const resposta = await fetch(`${apiUrl}/agendamentos`, {
       method: 'POST',
       headers: {
@@ -139,7 +194,8 @@ formulario.addEventListener('submit', async function (evento) {
         servico: servico,
         data: data,
         hora: horarioSelecionado,
-        observacao: observacao || 'Sem observação'
+        observacao: observacao || 'Sem observação',
+        valor: valorTotal
       })
     });
 
@@ -147,7 +203,7 @@ formulario.addEventListener('submit', async function (evento) {
       throw new Error('Erro ao criar agendamento.');
     }
 
-    alert('Agendamento realizado com sucesso!');
+    alert(`Agendamento realizado com sucesso! Total: ${formatarMoeda(valorTotal)}`);
     window.location.href = 'agenda.html';
   } catch (erro) {
     console.error(erro);
