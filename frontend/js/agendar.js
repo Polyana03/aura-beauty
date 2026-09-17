@@ -30,7 +30,7 @@ function pegarUsuarioLogado() {
 
 function configurarUsuario(usuario) {
   usuarioNome.textContent = `Olá, ${usuario.nome}!`;
-  usuarioAvatar.src = '../imagem/mulher.jpg';
+  usuarioAvatar.src = '../../imagem/mulher.jpg';
   usuarioAvatar.alt = usuario.nome;
 
   if (perfilNome) perfilNome.textContent = usuario.nome;

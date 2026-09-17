@@ -26,7 +26,7 @@ function pegarUsuarioLogado() {
 
 function configurarUsuario(usuario) {
   usuarioNome.textContent = `Olá, ${usuario.nome}!`;
-  usuarioAvatar.src = '../imagem/mulher.jpg';
+  usuarioAvatar.src = '../../imagem/mulher.jpg';
   usuarioAvatar.alt = usuario.nome;
 
   if (perfilNome) perfilNome.textContent = usuario.nome;
@@ -156,7 +156,7 @@ async function carregarAgendamentos(termoBusca = '') {
         const dataFormatada = new Date(`${agendamento.data}T12:00:00`).toLocaleDateString('pt-BR');
         const cancelado = agendamento.status === 'cancelado';
         const status = cancelado ? 'Cancelado' : dataCompleta < new Date() ? 'Realizado' : 'Confirmado';
-        const imagem = '../imagem/mulher.jpg';
+        const imagem = '../../imagem/mulher.jpg';
         const botaoCancelar = !cancelado && dataCompleta >= new Date()
           ? `<button type="button" class="botao-cancelar" data-id="${agendamento.id}">Cancelar</button>`
           : '';

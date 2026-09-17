@@ -16,9 +16,9 @@ const labelMesAtual = document.getElementById('labelMesAtual');
 const estatFaturamentoMes = document.getElementById('estatFaturamentoMes');
 const estatFaturamentoDia = document.getElementById('estatFaturamentoDia');
 const imagensProfissionais = {
-  Polyana: '../imagem/polyana.jpg',
-  Iara: '../imagem/iara.jpg',
-  Suerllainy: '../imagem/suerllainy.jpg'
+  Polyana: '../../imagem/polyana.jpg',
+  Iara: '../../imagem/iara.jpg',
+  Suerllainy: '../../imagem/suerllainy.jpg'
 };
 
 function pegarUsuarioLogado() {
@@ -34,7 +34,7 @@ function pegarUsuarioLogado() {
 
 function configurarUsuario(usuario) {
   usuarioNome.textContent = `Olá, ${usuario.nome}!`;
-  usuarioAvatar.src = '../imagem/mulher.jpg';
+  usuarioAvatar.src = '../../imagem/mulher.jpg';
   usuarioAvatar.alt = usuario.nome;
   mensagemBoasVindas.textContent = `Olá, ${usuario.nome}!`;
 
@@ -158,10 +158,12 @@ function renderizarProfissionais(profissionais) {
     .map(
       (profissional) => `
         <article class="card-profissional">
-          <img src="${imagensProfissionais[profissional.nome] || '../imagem/mulher.jpg'}" alt="${profissional.nome}" />
-          <div class="dados-prof">
-            <h4>${profissional.nome}</h4>
-            <p>${profissional.cargo}</p>
+          <div class="identidade-profissional">
+            <img src="${imagensProfissionais[profissional.nome] || '../../imagem/mulher.jpg'}" alt="${profissional.nome}" />
+            <div class="dados-prof">
+              <h4>${profissional.nome}</h4>
+              <p>${profissional.cargo}</p>
+            </div>
           </div>
           <div class="servicos-lista">
             <h5>Serviços Ofertados</h5>
@@ -216,20 +218,14 @@ function renderizarProximoHorario(agendamentos) {
     return;
   }
 
-  const proximos = agendamentosFuturos.slice(0, 2);
-  proximoHorario.innerHTML = proximos
-    .map(
-      (agendamento) => {
-        const dataFormatada = new Date(`${agendamento.data}T12:00:00`).toLocaleDateString('pt-BR');
+  const agendamento = agendamentosFuturos[0];
+  const dataFormatada = new Date(`${agendamento.data}T12:00:00`).toLocaleDateString('pt-BR');
 
-        return `
-        <div>
-          <strong>${agendamento.servico}</strong> — ${dataFormatada} às ${agendamento.hora}
-        </div>
-        `;
-      }
-    )
-    .join('<br>');
+  proximoHorario.innerHTML = `
+    <div>
+      <strong>${agendamento.servico}</strong> — ${dataFormatada} às ${agendamento.hora}
+    </div>
+  `;
 }
 
 if (campoBusca) {
