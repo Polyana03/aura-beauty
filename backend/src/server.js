@@ -20,10 +20,10 @@ if (!fs.existsSync(dbPath)) {
   fs.writeFileSync(
     dbPath,
     JSON.stringify({
-      users: [],
-      professionals: [],
-      services: [],
-      appointments: []
+      usuarios: [],
+      profissionais: [],
+      servicos: [],
+      agendamentos: []
     }, null, 2)
   );
 }
@@ -31,150 +31,147 @@ if (!fs.existsSync(dbPath)) {
 app.use(cors());
 app.use(express.json());
 
-function readDb() {
+function lerBanco() {
   const raw = fs.readFileSync(dbPath, 'utf8');
   return JSON.parse(raw);
 }
 
-function writeDb(data) {
-  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+function salvarBanco(dados) {
+  fs.writeFileSync(dbPath, JSON.stringify(dados, null, 2));
 }
 
 app.get('/api/health', (req, res) => {
   res.json({ message: 'Backend funcionando', status: 'ok' });
 });
 
-// USERS
-app.get('/api/users', (req, res) => {
-  const db = readDb();
-  res.json(db.users);
+app.get('/api/usuarios', (req, res) => {
+  const db = lerBanco();
+  res.json(db.usuarios);
 });
 
-app.post('/api/users', (req, res) => {
-  const db = readDb();
-  const { name, email, password } = req.body;
+app.post('/api/usuarios', (req, res) => {
+  const db = lerBanco();
+  const { nome, email, senha } = req.body;
 
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: 'Nome, email e senha são obrigatórios.' });
+  if (!nome || !email || !senha) {
+    return res.status(400).json({ message: 'Nome, e-mail e senha são obrigatórios.' });
   }
 
-  const emailExists = db.users.some((user) => user.email === email);
+  const emailExiste = db.usuarios.some((usuario) => usuario.email === email);
 
-  if (emailExists) {
+  if (emailExiste) {
     return res.status(400).json({ message: 'Este e-mail já está cadastrado.' });
   }
 
-  const newUser = {
+  const novoUsuario = {
     id: Date.now(),
-    name,
+    nome,
     email,
-    password,
-    role: 'cliente'
+    senha,
+    tipoUsuario: 'cliente'
   };
 
-  db.users.push(newUser);
-  writeDb(db);
+  db.usuarios.push(novoUsuario);
+  salvarBanco(db);
 
-  res.status(201).json(newUser);
+  const { senha: _, ...usuarioSemSenha } = novoUsuario;
+  res.status(201).json(usuarioSemSenha);
 });
 
 app.post('/api/login', (req, res) => {
-  const db = readDb();
-  const { email, password } = req.body;
+  const db = lerBanco();
+  const { email, senha } = req.body;
 
-  const user = db.users.find(
-    (item) => item.email === email && item.password === password
+  const usuario = db.usuarios.find(
+    (item) => item.email === email && item.senha === senha
   );
 
-  if (!user) {
+  if (!usuario) {
     return res.status(401).json({ message: 'E-mail ou senha incorretos.' });
   }
 
-  const { password: _, ...userWithoutPassword } = user;
-  res.json({ message: 'Login realizado com sucesso!', user: userWithoutPassword });
+  const { senha: _, ...usuarioSemSenha } = usuario;
+  res.json({ message: 'Login realizado com sucesso!', usuario: usuarioSemSenha });
 });
 
-// PROFESSIONALS
-app.get('/api/professionals', (req, res) => {
-  const db = readDb();
-  res.json(db.professionals);
+app.get('/api/profissionais', (req, res) => {
+  const db = lerBanco();
+  res.json(db.profissionais);
 });
 
-app.post('/api/professionals', (req, res) => {
-  const db = readDb();
-  const { name, specialty } = req.body;
+app.post('/api/profissionais', (req, res) => {
+  const db = lerBanco();
+  const { nome, especialidade } = req.body;
 
-  if (!name || !specialty) {
+  if (!nome || !especialidade) {
     return res.status(400).json({ message: 'Nome e especialidade são obrigatórios.' });
   }
 
-  const newProfessional = {
+  const novoProfissional = {
     id: Date.now(),
-    name,
-    specialty
+    nome,
+    especialidade
   };
 
-  db.professionals.push(newProfessional);
-  writeDb(db);
+  db.profissionais.push(novoProfissional);
+  salvarBanco(db);
 
-  res.status(201).json(newProfessional);
+  res.status(201).json(novoProfissional);
 });
 
-// SERVICES
-app.get('/api/services', (req, res) => {
-  const db = readDb();
-  res.json(db.services);
+app.get('/api/servicos', (req, res) => {
+  const db = lerBanco();
+  res.json(db.servicos);
 });
 
-app.post('/api/services', (req, res) => {
-  const db = readDb();
-  const { name, price, duration } = req.body;
+app.post('/api/servicos', (req, res) => {
+  const db = lerBanco();
+  const { nome, preco, duracao } = req.body;
 
-  if (!name || !price || !duration) {
+  if (!nome || !preco || !duracao) {
     return res.status(400).json({ message: 'Nome, preço e duração são obrigatórios.' });
   }
 
-  const newService = {
+  const novoServico = {
     id: Date.now(),
-    name,
-    price,
-    duration
+    nome,
+    preco,
+    duracao
   };
 
-  db.services.push(newService);
-  writeDb(db);
+  db.servicos.push(novoServico);
+  salvarBanco(db);
 
-  res.status(201).json(newService);
+  res.status(201).json(novoServico);
 });
 
-// APPOINTMENTS
-app.get('/api/appointments', (req, res) => {
-  const db = readDb();
-  res.json(db.appointments);
+app.get('/api/agendamentos', (req, res) => {
+  const db = lerBanco();
+  res.json(db.agendamentos);
 });
 
-app.post('/api/appointments', (req, res) => {
-  const db = readDb();
-  const { clientName, professionalId, serviceId, date, time } = req.body;
+app.post('/api/agendamentos', (req, res) => {
+  const db = lerBanco();
+  const { cliente, profissionalId, servicoId, data, hora } = req.body;
 
-  if (!clientName || !professionalId || !serviceId || !date || !time) {
+  if (!cliente || !profissionalId || !servicoId || !data || !hora) {
     return res.status(400).json({ message: 'Todos os campos do agendamento são obrigatórios.' });
   }
 
-  const newAppointment = {
+  const novoAgendamento = {
     id: Date.now(),
-    clientName,
-    professionalId,
-    serviceId,
-    date,
-    time,
+    cliente,
+    profissionalId,
+    servicoId,
+    data,
+    hora,
     status: 'agendado'
   };
 
-  db.appointments.push(newAppointment);
-  writeDb(db);
+  db.agendamentos.push(novoAgendamento);
+  salvarBanco(db);
 
-  res.status(201).json(newAppointment);
+  res.status(201).json(novoAgendamento);
 });
 
 app.listen(PORT, () => {
