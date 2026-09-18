@@ -13,9 +13,40 @@ const textareaObservacao = document.getElementById('observacao');
 const listaHorarios = document.getElementById('listaHorarios');
 const valorServicoEl = document.getElementById('valorServico');
 const valorTotalEl = document.getElementById('valorTotal');
+const campoBusca = document.getElementById('campoBusca');
+const botaoLimparBusca = document.querySelector('.btn-fechar');
+const mesAtualEl = document.getElementById('mesAtual');
+const calendarioDias = document.getElementById('calendarioDias');
+const mesAnterior = document.getElementById('mesAnterior');
+const mesSeguinte = document.getElementById('mesSeguinte');
+const horarioEscolhidoEl = document.getElementById('horarioEscolhido');
 
 let horarioSelecionado = '';
+let mesCalendario = new Date();
+let agendamentosCadastrados = [];
 const precosPorServico = {};
+
+function configurarBusca() {
+  if (!campoBusca) return;
+
+  campoBusca.addEventListener('keydown', function (evento) {
+    if (evento.key !== 'Enter') return;
+
+    const termo = campoBusca.value.toLowerCase();
+    if (termo.includes('início') || termo.includes('inicio')) {
+      window.location.href = 'inicio.html';
+    } else if (termo.includes('agenda')) {
+      window.location.href = 'agenda.html';
+    }
+  });
+
+  if (botaoLimparBusca) {
+    botaoLimparBusca.addEventListener('click', function () {
+      campoBusca.value = '';
+      campoBusca.focus();
+    });
+  }
+}
 
 function pegarUsuarioLogado() {
   const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
@@ -36,6 +67,11 @@ function configurarUsuario(usuario) {
   if (perfilNome) perfilNome.textContent = usuario.nome;
   if (perfilEmail) perfilEmail.textContent = usuario.email || 'Não informado';
   if (perfilTipo) perfilTipo.textContent = 'Cliente';
+}
+
+function obterDataLocal() {
+  const hoje = new Date();
+  return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
 }
 
 function configurarMenuPerfil() {
@@ -65,24 +101,93 @@ function configurarMenuPerfil() {
 
 function preencherDataMinima() {
   const hoje = new Date();
-  const dataAtual = hoje.toISOString().split('T')[0];
+  const dataAtual = obterDataLocal();
   inputData.min = dataAtual;
+  inputData.value = dataAtual;
+  mesCalendario = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+  renderizarCalendario();
+}
+
+function formatarDataCalendario(ano, mes, dia) {
+  return `${ano}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+}
+
+function renderizarCalendario() {
+  if (!mesAtualEl || !calendarioDias) return;
+
+  const ano = mesCalendario.getFullYear();
+  const mes = mesCalendario.getMonth();
+  const primeiroDia = new Date(ano, mes, 1).getDay();
+  const totalDias = new Date(ano, mes + 1, 0).getDate();
+  const dataSelecionada = inputData.value;
+  const dataMinima = obterDataLocal();
+
+  mesAtualEl.textContent = mesCalendario.toLocaleDateString('pt-BR', {
+    month: 'long',
+    year: 'numeric'
+  }).replace(/^./, (letra) => letra.toUpperCase());
+
+  calendarioDias.innerHTML = '';
+
+  for (let indice = 0; indice < primeiroDia; indice += 1) {
+    calendarioDias.insertAdjacentHTML('beforeend', '<span class="dia-vazio" aria-hidden="true"></span>');
+  }
+
+  for (let dia = 1; dia <= totalDias; dia += 1) {
+    const data = formatarDataCalendario(ano, mes, dia);
+    const passado = data < dataMinima;
+    const selecionado = data === dataSelecionada && !passado ? ' selecionado' : '';
+    calendarioDias.insertAdjacentHTML(
+      'beforeend',
+      `<button type="button" class="dia-calendario${selecionado}${passado ? ' passado' : ''}" data-data="${data}"${passado ? ' disabled' : ''}>${dia}</button>`
+    );
+  }
+
+  calendarioDias.querySelectorAll('.dia-calendario').forEach((botao) => {
+    botao.addEventListener('click', function () {
+      if (botao.disabled) return;
+      inputData.value = botao.dataset.data;
+      horarioSelecionado = '';
+      atualizarHorarioEscolhido();
+      renderizarCalendario();
+      criarListaHorarios();
+    });
+  });
+
+  if (mesAnterior) {
+    const mesAtual = new Date();
+    mesAnterior.disabled = ano === mesAtual.getFullYear() && mes === mesAtual.getMonth();
+  }
+}
+
+function atualizarHorarioEscolhido() {
+  if (horarioEscolhidoEl) {
+    horarioEscolhidoEl.textContent = horarioSelecionado || 'Nenhum';
+  }
 }
 
 function criarListaHorarios() {
   const horarios = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00'];
+  const horariosOcupados = agendamentosCadastrados
+    .filter((agendamento) => agendamento.status !== 'cancelado' && agendamento.data === inputData.value)
+    .map((agendamento) => agendamento.hora);
 
   listaHorarios.innerHTML = horarios
     .map(
-      (horario) => `
+      (horario) => {
+        const ocupado = horariosOcupados.includes(horario);
+        const selecionado = horario === horarioSelecionado && !ocupado ? ' selected' : '';
+        return `
         <button
           type="button"
-          class="time-button ${horario === horarioSelecionado ? 'selected' : ''}"
+          class="time-button${selecionado}${ocupado ? ' indisponivel' : ''}"
           data-horario="${horario}"
+          ${ocupado ? 'disabled' : ''}
         >
-          ${horario}
+          <span>${horario}</span>${ocupado ? '<small>Ocupado</small>' : ''}
         </button>
-      `
+      `;
+      }
     )
     .join('');
 
@@ -90,10 +195,21 @@ function criarListaHorarios() {
 
   botoes.forEach(function (botao) {
     botao.addEventListener('click', function () {
+      if (botao.disabled) return;
       horarioSelecionado = botao.dataset.horario;
+      atualizarHorarioEscolhido();
       criarListaHorarios();
     });
   });
+}
+
+async function carregarDisponibilidade() {
+  try {
+    agendamentosCadastrados = await buscarAgendamentos();
+    criarListaHorarios();
+  } catch (erro) {
+    console.error(erro);
+  }
 }
 
 async function buscarAgendamentos() {
@@ -176,6 +292,12 @@ formulario.addEventListener('submit', async function (evento) {
     return;
   }
 
+  if (data < obterDataLocal()) {
+    alert('Não é possível agendar uma data que já passou. Escolha hoje ou uma data futura.');
+    inputData.focus();
+    return;
+  }
+
   try {
     const horarioDisponivel = await verificarHorarioDisponivel(data, horarioSelecionado);
 
@@ -221,7 +343,31 @@ const usuario = pegarUsuarioLogado();
 if (usuario) {
   configurarUsuario(usuario);
   configurarMenuPerfil();
+  configurarBusca();
   preencherDataMinima();
   criarListaHorarios();
+  inputData.addEventListener('change', function () {
+    const dataEscolhida = new Date(`${inputData.value}T12:00:00`);
+    if (!Number.isNaN(dataEscolhida.getTime())) {
+      mesCalendario = new Date(dataEscolhida.getFullYear(), dataEscolhida.getMonth(), 1);
+      horarioSelecionado = '';
+      atualizarHorarioEscolhido();
+      renderizarCalendario();
+      criarListaHorarios();
+    }
+  });
+
+  mesAnterior.addEventListener('click', function () {
+    if (mesAnterior.disabled) return;
+    mesCalendario.setMonth(mesCalendario.getMonth() - 1);
+    renderizarCalendario();
+  });
+
+  mesSeguinte.addEventListener('click', function () {
+    mesCalendario.setMonth(mesCalendario.getMonth() + 1);
+    renderizarCalendario();
+  });
+
+  carregarDisponibilidade();
   carregarServicos();
 }

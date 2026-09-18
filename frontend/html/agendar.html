@@ -1,19 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aura Beauty | Agendar</title>
-  <link rel="stylesheet" href="../css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Beauty | Agendar</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-<body class="app-body">
-  <div class="container">
-    <aside class="sidebar"><h1 class="logo">Aura Beauty</h1><nav class="menu"><a href="inicio.html" class="menu-item">Início</a><a href="agendar.html" class="menu-item ativo">Agendar</a><a href="agenda.html" class="menu-item">Agenda/Histórico</a></nav><button id="sairBtn" class="sair" type="button">Sair ←</button></aside>
-    <main class="conteudo"><header class="topo"><div class="perfil-wrapper"><div class="perfil-topo"><img id="usuarioAvatar" src="../../imagem/mulher.jpg" alt="Perfil" class="foto-perfil"><div class="info-usuario"><span id="usuarioNome" class="nome-usuario">Olá, Maria!</span><span class="tipo-usuario">Cliente</span></div><button class="seta-btn" type="button" aria-expanded="false" aria-label="Abrir informações do usuário">▼</button></div><div id="perfilMenu" class="perfil-menu" aria-hidden="true"><div class="perfil-menu-item"><span>Nome</span><strong id="perfilNome">Maria</strong></div><div class="perfil-menu-item"><span>Email</span><strong id="perfilEmail">maria@email.com</strong></div><div class="perfil-menu-item"><span>Tipo</span><strong id="perfilTipo">Cliente</strong></div></div></div></header>
-      <section class="boas-vindas"><h2>Agendar atendimento</h2><p class="subtitulo">Escolha o serviço, a data e o horário desejados.</p></section>
-      <section class="page-card form-layout"><div class="form-panel"><form id="formAgendamento"><div class="campo"><label for="nomeCliente">Nome do cliente</label><input id="nomeCliente" type="text" placeholder="Digite seu nome"></div><div class="campo"><label for="servico">Serviço</label><select id="servico"><option value="">Selecione um serviço</option></select></div><div id="resumoValor" class="resumo-valor" aria-live="polite"><span>Valor do serviço:</span><strong id="valorServico">R$ 0,00</strong></div><div class="campo"><label for="data">Data</label><input id="data" type="date"></div><div class="campo"><label>Horário</label><div id="listaHorarios" class="time-list"></div></div><div class="campo"><label for="observacao">Observação</label><textarea id="observacao" placeholder="Digite alguma observação (opcional)"></textarea></div><div class="total-agendamento"><span>Total do agendamento:</span><strong id="valorTotal">R$ 0,00</strong></div><button type="submit" class="button button-primary">Confirmar agendamento</button></form></div><aside class="info-panel"><h3>Importante</h3><p>Escolha um serviço, uma data e um horário disponível para confirmar o atendimento.</p><div class="info-box"><h4>Dicas</h4><ul><li>Preencha seu nome corretamente.</li><li>Use a data do atendimento.</li><li>Escolha um horário disponível.</li></ul></div></aside></section>
-    </main>
-  </div>
-  <script src="../js/agendar.js"></script>
+<body class="app-body pagina-agendar">
+
+    <div class="container">
+
+        <!-- barra lateral -->
+        <aside class="sidebar">
+            <h1 class="logo">Aura Beauty</h1>
+
+            <nav class="menu">
+                <a href="inicio.html" class="menu-item">Início</a>
+                <a href="agendar.html" class="menu-item ativo">Agendar</a>
+                <a href="agenda.html" class="menu-item">Agenda/Histórico</a>
+            </nav>
+
+            <button id="sairBtn" class="sair" type="button">
+                Sair ←
+            </button>
+        </aside>
+
+        <!-- conteudo Principal -->
+        <main class="conteudo">
+
+            <!-- cabeçalho superior -->
+            <header class="topo">
+                <!-- Barra de Pesquisa -->
+                <div class="barra-pesquisa">
+                    <i class="bi bi-search icone-lupa" aria-hidden="true"></i>
+                    <input id="campoBusca" type="text" placeholder="Buscar início, agendar...">
+                    <button class="btn-fechar" type="button" aria-label="Limpar busca">✕</button>
+                </div>
+
+                <!-- Perfil do Usuário -->
+                <div class="perfil-wrapper">
+                    <div class="perfil-topo">
+                        <img id="usuarioAvatar" src="../../imagem/mulher.jpg" alt="Perfil" class="foto-perfil">
+                        <div class="info-usuario">
+                            <span id="usuarioNome" class="nome-usuario">Olá, Maria!</span>
+                            <span class="tipo-usuario">Cliente</span>
+                        </div>
+                        <button class="seta-btn" type="button" aria-expanded="false" aria-label="Abrir informações do usuário">
+                            ▼
+                        </button>
+                    </div>
+
+                    <!-- Menu do Perfil (oculto por padrão) -->
+                    <div id="perfilMenu" class="perfil-menu" aria-hidden="true">
+                        <div class="perfil-menu-item">
+                            <span>Nome</span>
+                            <strong id="perfilNome">Maria</strong>
+                        </div>
+                        <div class="perfil-menu-item">
+                            <span>Email</span>
+                            <strong id="perfilEmail">maria@email.com</strong>
+                        </div>
+                        <div class="perfil-menu-item">
+                            <span>Tipo</span>
+                            <strong id="perfilTipo">Cliente</strong>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Saudação -->
+            <section class="boas-vindas">
+                <h2>Agendar atendimento</h2>
+                <p class="subtitulo">Escolha o serviço, a data e o horário desejados.</p>
+            </section>
+
+            <!-- Área Principal: Formulário + Calendário + Horários -->
+            <section class="agendamento-grid">
+
+                <!-- Formulário de Dados -->
+                <div class="agendamento-container formulario-container">
+                    <form id="formAgendamento">
+                        <div class="campo">
+                            <label for="nomeCliente">Nome</label>
+                            <input id="nomeCliente" type="text" placeholder="Digite seu nome">
+                        </div>
+
+                        <div class="campo">
+                            <label for="servico">Serviço</label>
+                            <select id="servico">
+                                <option value="">Selecione o serviço</option>
+                            </select>
+                        </div>
+
+                        <div id="resumoValor" class="resumo-valor" aria-live="polite">
+                            <span>Valor do serviço:</span>
+                            <strong id="valorServico">R$ 0,00</strong>
+                        </div>
+
+                        <div class="campo">
+                            <label for="observacao">Observação <small>(opcional)</small></label>
+                            <textarea id="observacao" placeholder="Adicione uma observação..."></textarea>
+                        </div>
+
+                        <div class="total-agendamento">
+                            <span>Total do agendamento:</span>
+                            <strong id="valorTotal">R$ 0,00</strong>
+                        </div>
+
+                        <button type="submit" class="button button-primary">
+                            Confirmar agendamento
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Calendário -->
+                <div class="agendamento-container calendario-container">
+                    <div class="calendario-cabecalho">
+                        <button id="mesAnterior" type="button" aria-label="Mês anterior">‹</button>
+                        <strong id="mesAtual">Calendário</strong>
+                        <button id="mesSeguinte" type="button" aria-label="Próximo mês">›</button>
+                    </div>
+
+                    <div class="dias-semana">
+                        <span>D</span>
+                        <span>S</span>
+                        <span>T</span>
+                        <span>Q</span>
+                        <span>Q</span>
+                        <span>S</span>
+                        <span>S</span>
+                    </div>
+
+                    <div id="calendarioDias" class="calendario-dias">
+                        <!-- preenchido via JavaScript -->
+                    </div>
+
+                    <div class="campo campo-data">
+                        <label for="data">Data escolhida</label>
+                        <input id="data" type="date">
+                    </div>
+
+                    <div class="aviso-agendamento">
+                        <strong>Importante</strong>
+                        <p>O agendamento só será confirmado após a seleção do horário.</p>
+                    </div>
+                </div>
+
+                <!-- Horários Disponíveis -->
+                <div class="agendamento-container horarios-container">
+                    <h3>Horários disponíveis</h3>
+                    <p class="horario-ajuda">Escolha um horário para o dia selecionado.</p>
+
+                    <div id="listaHorarios" class="time-list">
+                        <!-- Preenchido via JavaScript -->
+                    </div>
+
+                    <div class="horario-selecionado">
+                        Horário escolhido: <strong id="horarioEscolhido">Nenhum</strong>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Script -->
+    <script src="../js/agendar.js"></script>
 </body>
 </html>

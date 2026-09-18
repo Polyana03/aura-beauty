@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap');
 
+/* =========================
+  CONFIGURACOES GERAIS
+========================= */
+
 :root {
   --rosa-claro: #f9dfe6;
   --rosa-medio: #f5c8d7;
@@ -202,6 +206,10 @@ body {
 }
 
 /* Layout do sistema */
+
+/* =========================
+  ESTRUTURA COMPARTILHADA
+========================= */
 
 .app-body {
   background-color: #FEE2E9;
@@ -442,6 +450,10 @@ body {
   color: var(--texto-escuro);
 }
 
+/* =========================
+  CABECALHO E PAINEL INICIAL
+========================= */
+
 .app-body .boas-vindas {
   margin-bottom: 24px;
 }
@@ -564,22 +576,239 @@ body {
   }
 }
 
+/* =========================
+  PAGINA AGENDAR
+========================= */
+
 .app-body .page-card {
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(214, 106, 139, 0.28);
-  border-radius: 18px;
-  padding: 22px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid #f0d0dc;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(232, 111, 140, 0.1);
+}
+
+.app-body .agendamento-grid {
+  display: grid;
+  grid-template-columns: minmax(250px, 1.05fr) minmax(270px, 0.95fr) minmax(220px, 0.8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.app-body .agendamento-container {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #f0d0dc;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(232, 111, 140, 0.1);
+}
+
+.app-body .formulario-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-body .formulario-container .campo textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.app-body .formulario-container .button-primary {
+  margin-top: 4px;
+}
+
+.app-body .calendario-container {
+  background: #fffafa;
+}
+
+.app-body .calendario-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--texto-escuro);
+  margin-bottom: 20px;
+}
+
+.app-body .calendario-cabecalho button {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texto-escuro);
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.app-body .calendario-cabecalho button:hover {
+  background: var(--rosa-claro);
+}
+
+.app-body .dias-semana,
+.app-body .calendario-dias {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 7px;
+  text-align: center;
+}
+
+.app-body .dias-semana {
+  margin-bottom: 9px;
+  color: var(--texto-suave);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.app-body .dia-vazio,
+.app-body .dia-calendario {
+  aspect-ratio: 1;
+}
+
+.app-body .dia-calendario {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texto-escuro);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.app-body .dia-calendario:hover {
+  background: var(--rosa-claro);
+}
+
+.app-body .dia-calendario.passado,
+.app-body .dia-calendario.passado:hover {
+  background: transparent;
+  color: #cdbbc1;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.app-body .calendario-cabecalho button:disabled {
+  color: #d8c7cd;
+  cursor: not-allowed;
+}
+
+.app-body .dia-calendario.selecionado {
+  background: var(--rosa-escuro);
+  color: #fff;
+  font-weight: 700;
+}
+
+.app-body .campo-data {
+  margin-top: 20px;
+}
+
+.app-body .campo-data input {
+  padding: 9px 10px;
+  font-size: 13px;
+}
+
+.app-body .aviso-agendamento {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--rosa-claro);
+  color: var(--texto-escuro);
+  font-size: 13px;
+}
+
+.app-body .aviso-agendamento strong {
+  display: block;
+  color: var(--rosa-profundo);
+  margin-bottom: 5px;
+}
+
+.app-body .aviso-agendamento p {
+  line-height: 1.45;
+}
+
+.app-body .horarios-container h3 {
+  color: var(--texto-escuro);
+  font-size: 16px;
+  text-align: center;
+}
+
+.app-body .horario-ajuda {
+  margin: 8px 0 18px;
+  color: var(--texto-suave);
+  font-size: 12px;
+  text-align: center;
+}
+
+.app-body .horarios-container .time-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.app-body .horarios-container .time-button {
+  width: 100%;
+  padding: 11px 8px;
+  border-radius: 7px;
+  background: #fff5f8;
+  border-color: #efb4c8;
+  color: var(--rosa-profundo);
+  font-weight: 700;
+}
+
+.app-body .horarios-container .time-button:hover,
+.app-body .horarios-container .time-button.selected {
+  background: var(--rosa-escuro);
+  border-color: var(--rosa-escuro);
+  color: #fff;
+}
+
+.app-body .horarios-container .time-button.indisponivel,
+.app-body .horarios-container .time-button.indisponivel:hover {
+  background: #f3e5e9;
+  border-color: #ead4dc;
+  color: #a88a94;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.app-body .time-button small {
+  display: block;
+  margin-top: 2px;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.app-body .horario-selecionado {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--borda);
+  color: var(--texto-suave);
+  font-size: 12px;
+  text-align: center;
+}
+
+.app-body .horario-selecionado strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--rosa-profundo);
+  font-size: 15px;
 }
 
 .app-body .form-layout {
   display: grid;
-  grid-template-columns: 1.6fr 0.9fr;
-  gap: 22px;
+  grid-template-columns: minmax(0, 1.65fr) minmax(240px, 0.75fr);
+  align-items: start;
+  gap: 28px;
 }
 
 .app-body .form-panel form {
   display: flex;
   flex-direction: column;
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
 }
 
 .app-body .form-panel .campo textarea {
@@ -588,10 +817,14 @@ body {
 }
 
 .app-body .info-panel {
-  background: rgba(245, 200, 215, 0.3);
-  border: 1px solid rgba(214, 106, 139, 0.28);
-  border-radius: 18px;
-  padding: 20px;
+  position: sticky;
+  top: 24px;
+  background: #f8c8d8;
+  border: 1px solid #efb3c7;
+  border-radius: 10px;
+  padding: 24px;
+  min-height: 220px;
+  box-shadow: 0 2px 8px rgba(232, 111, 140, 0.1);
 }
 
 .app-body .resumo-valor,
@@ -625,9 +858,16 @@ body {
 }
 
 .app-body .info-box {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.58);
   border-radius: 12px;
   padding: 14px;
+}
+
+.app-body .form-layout .campo input,
+.app-body .form-layout .campo select,
+.app-body .form-layout .campo textarea {
+  background: #fff;
+  border-color: #f0d0dc;
 }
 
 .app-body .info-box ul {
@@ -635,6 +875,10 @@ body {
   padding-left: 18px;
   color: var(--texto);
 }
+
+/* =========================
+  PAGINA AGENDA E HISTORICO
+========================= */
 
 .app-body .agenda-header {
   margin-bottom: 16px;
@@ -751,6 +995,10 @@ body {
   border-color: var(--rosa-escuro);
   color: var(--branco);
 }
+
+/* =========================
+  PROFISSIONAIS E SERVICOS
+========================= */
 
 .app-body .linha-conteudo {
   display: flex;
@@ -913,6 +1161,18 @@ body {
   .app-body .conteudo {
     padding: 20px;
   }
+
+  .app-body .form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .app-body .agendamento-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-body .info-panel {
+    position: static;
+  }
 }
 
 @media (max-width: 900px) {
@@ -962,4 +1222,30 @@ body {
   .app-body .servicos-lista {
     padding-left: 4px;
   }
+}
+
+.app-body.pagina-agenda .boas-vindas,
+.app-body.pagina-agendar .boas-vindas {
+  margin-bottom: 22px;
+}
+
+.app-body.pagina-agenda .cards-estatisticos {
+  margin-bottom: 26px;
+}
+
+.app-body.pagina-agenda .page-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-top: 3px solid var(--rosa-destaque);
+}
+
+.app-body.pagina-agenda .agenda-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--borda);
+}
+
+.app-body.pagina-agendar .agendamento-grid {
+  margin-top: 4px;
 }

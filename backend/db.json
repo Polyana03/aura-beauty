@@ -158,6 +158,51 @@
       "observacao": "vou pagar no cartao",
       "valor": 95,
       "id": 9
+    },
+    {
+      "cliente": "Marçal",
+      "servico": "Remoção de Cutículas",
+      "data": "2026-10-08",
+      "hora": "13:00",
+      "observacao": "Sem observação",
+      "valor": 40,
+      "id": 10
+    },
+    {
+      "cliente": "Marçal",
+      "servico": "Escova",
+      "data": "2026-09-26",
+      "hora": "16:00",
+      "observacao": "Sem observação",
+      "valor": 95,
+      "id": 11
+    },
+    {
+      "cliente": "maria",
+      "servico": "Escova",
+      "data": "2026-08-18",
+      "hora": "13:00",
+      "observacao": "Sem observação",
+      "valor": 95,
+      "id": 12
+    },
+    {
+      "cliente": "maria",
+      "servico": "Corte",
+      "data": "2026-07-14",
+      "hora": "13:00",
+      "observacao": "Sem observação",
+      "valor": 90,
+      "id": 13
+    },
+    {
+      "cliente": "sofia",
+      "servico": "Maquiagem Social",
+      "data": "2026-08-03",
+      "hora": "09:00",
+      "observacao": "Sem observação",
+      "valor": 180,
+      "id": 14
     }
   ]
 }

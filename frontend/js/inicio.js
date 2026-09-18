@@ -10,6 +10,7 @@ const listaServicos = document.getElementById('listaServicos');
 const proximoHorario = document.getElementById('proximoHorario');
 const botaoSair = document.getElementById('sairBtn');
 const campoBusca = document.getElementById('campoBusca');
+const botaoLimparBusca = document.querySelector('.btn-fechar');
 const estatAgendamentosHoje = document.getElementById('estatAgendamentosHoje');
 const estatMesAtual = document.getElementById('estatMesAtual');
 const labelMesAtual = document.getElementById('labelMesAtual');
@@ -177,6 +178,42 @@ function renderizarProfissionais(profissionais) {
     .join('');
 }
 
+function renderizarResultadosBusca(termo) {
+  const busca = termo.trim().toLowerCase();
+
+  if (!busca) {
+    carregarDados();
+    return;
+  }
+
+  Promise.all([
+    fetch(`${apiUrl}/profissionais`).then((resposta) => resposta.json()),
+    fetch(`${apiUrl}/servicos`).then((resposta) => resposta.json()),
+    fetch(`${apiUrl}/agendamentos`).then((resposta) => resposta.json())
+  ]).then(([profissionais, servicos, agendamentos]) => {
+    const profissionaisFiltrados = profissionais.filter((profissional) => {
+      const texto = `${profissional.nome} ${profissional.cargo} ${(profissional.servicos || []).join(' ')}`.toLowerCase();
+      return texto.includes(busca);
+    });
+    const servicosFiltrados = servicos.filter((servico) => servico.nome.toLowerCase().includes(busca));
+    const agendamentosFiltrados = agendamentos.filter((agendamento) => {
+      const texto = `${agendamento.cliente} ${agendamento.servico} ${agendamento.data} ${agendamento.hora}`.toLowerCase();
+      return texto.includes(busca);
+    });
+
+    renderizarProfissionais(profissionaisFiltrados);
+    renderizarProximoHorario(agendamentosFiltrados);
+
+    if (!profissionaisFiltrados.length && !servicosFiltrados.length && !agendamentosFiltrados.length) {
+      listaProfissionais.innerHTML = '<p class="vazio">Nenhum resultado encontrado.</p>';
+      proximoHorario.textContent = 'Nenhum resultado encontrado.';
+    }
+  }).catch((erro) => {
+    console.error(erro);
+    listaProfissionais.innerHTML = '<p class="vazio">Não foi possível realizar a busca.</p>';
+  });
+}
+
 function renderizarServicos(servicos) {
   if (!listaServicos) {
     return;
@@ -230,26 +267,15 @@ function renderizarProximoHorario(agendamentos) {
 
 if (campoBusca) {
   campoBusca.addEventListener('input', function () {
-    const termo = campoBusca.value.trim().toLowerCase();
+    renderizarResultadosBusca(campoBusca.value);
+  });
+}
 
-    if (!termo) {
-      carregarDados();
-      return;
-    }
-
-    fetch(`${apiUrl}/agendamentos`)
-      .then((resposta) => resposta.json())
-      .then((agendamentos) => {
-        const filtrados = agendamentos.filter((agendamento) => {
-          const texto = `${agendamento.cliente} ${agendamento.servico} ${agendamento.data} ${agendamento.hora}`.toLowerCase();
-          return texto.includes(termo);
-        });
-
-        renderizarProximoHorario(filtrados);
-      })
-      .catch((erro) => {
-        console.error(erro);
-      });
+if (botaoLimparBusca && campoBusca) {
+  botaoLimparBusca.addEventListener('click', function () {
+    campoBusca.value = '';
+    campoBusca.focus();
+    carregarDados();
   });
 }
 

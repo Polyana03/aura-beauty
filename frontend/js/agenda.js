@@ -7,6 +7,7 @@ const perfilTipo = document.getElementById('perfilTipo');
 const listaAgendamentos = document.getElementById('listaAgendamentos');
 const botaoSair = document.getElementById('sairBtn');
 const campoBusca = document.getElementById('campoBusca');
+const botaoLimparBusca = document.querySelector('.btn-fechar');
 const estatAgendamentosHoje = document.getElementById('estatAgendamentosHoje');
 const estatMesAtual = document.getElementById('estatMesAtual');
 const labelMesAtual = document.getElementById('labelMesAtual');
@@ -233,6 +234,14 @@ async function carregarServicosComPreco() {
 if (campoBusca) {
   campoBusca.addEventListener('input', function () {
     carregarAgendamentos(campoBusca.value);
+  });
+}
+
+if (botaoLimparBusca && campoBusca) {
+  botaoLimparBusca.addEventListener('click', function () {
+    campoBusca.value = '';
+    campoBusca.focus();
+    carregarAgendamentos('');
   });
 }
 
