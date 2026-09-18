@@ -27,6 +27,6 @@ Permitir que clientes realizem agendamentos online de forma prática e organizad
 1. Abra um terminal na pasta `backend`.
 2. Instale as dependências com `npm install`.
 3. Inicie a API com `npm start`.
-4. Abra `frontend/html/index.html` usando o Live Server do VS Code.
+4. Abra `index.html` na raiz do projeto usando o Live Server do VS Code.
 
 A API ficará disponível em `http://localhost:3001`. O terminal do backend precisa permanecer aberto enquanto o sistema estiver sendo usado.

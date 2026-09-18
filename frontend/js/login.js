@@ -57,7 +57,7 @@ formularioLogin.addEventListener('submit', async function (evento) {
     );
 
     alert('Login realizado com sucesso!');
-    window.location.href = 'inicio.html';
+    window.location.href = 'frontend/html/inicio.html';
   } catch (erro) {
     console.error(erro);
     alert('Não foi possível fazer login no momento.');
@@ -119,7 +119,7 @@ formularioCriar.addEventListener('submit', async function (evento) {
       })
     );
 
-    window.location.href = 'inicio.html';
+    window.location.href = 'frontend/html/inicio.html';
   } catch (erro) {
     console.error(erro);
     alert('Não foi possível criar a conta agora.');

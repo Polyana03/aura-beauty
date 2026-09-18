@@ -18,7 +18,7 @@ function pegarUsuarioLogado() {
   const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
 
   if (!usuario) {
-    window.location.href = 'index.html';
+    window.location.href = '../../index.html';
     return null;
   }
 
@@ -247,7 +247,7 @@ if (botaoLimparBusca && campoBusca) {
 
 botaoSair.addEventListener('click', function () {
   localStorage.removeItem('usuarioLogado');
-  window.location.href = 'index.html';
+  window.location.href = '../../index.html';
 });
 
 const usuario = pegarUsuarioLogado();
